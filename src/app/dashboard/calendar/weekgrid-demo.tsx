@@ -7,6 +7,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
+import { Badge } from "@/components/ui/badge";
 
 type DayOfWeek = "月" | "火" | "水" | "木" | "金" | "土" | "日";
 
@@ -83,10 +85,29 @@ export function GridDemo() {
               <CardTitle>利用者B</CardTitle>
               <CardDescription>13:00-15:00</CardDescription>
             </CardHeader>
-            <CardContent>
-              ヘルパー3
-              <br />
-              ヘルパー4
+            <CardContent className="flex gap-1">
+              <Avatar>
+                <AvatarFallback className="bg-pink-300">板</AvatarFallback>
+              </Avatar>
+              <Avatar>
+                <AvatarFallback className="bg-blue-300">澤</AvatarFallback>
+              </Avatar>
+            </CardContent>
+          </Card>
+          <Card className="bg-red-100">
+            <CardHeader>
+              <CardTitle>利用者D</CardTitle>
+              <CardDescription>
+                <div className="flex gap-2">
+                  <p>11:00-12:00</p>
+                  <Badge className="bg-red-500">cancel</Badge>
+                </div>
+              </CardDescription>
+            </CardHeader>
+            <CardContent className="flex gap-1">
+              <Avatar>
+                <AvatarFallback className="bg-yellow-300">平</AvatarFallback>
+              </Avatar>
             </CardContent>
           </Card>
         </div>
