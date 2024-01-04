@@ -1,3 +1,9 @@
+import { DataTableDemo } from "./datatable-demo";
+
 export default function Page() {
-  return <p>Schedules Page</p>;
+  return (
+    <div>
+      <DataTableDemo />
+    </div>
+  );
 }
