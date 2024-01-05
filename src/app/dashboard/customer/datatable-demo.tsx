@@ -24,6 +24,7 @@ import {
   DropdownMenuItem,
   DropdownMenuLabel,
   DropdownMenuSeparator,
+  DropdownMenuShortcut,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
 import { Input } from "@/components/ui/input";
@@ -36,6 +37,34 @@ import {
   TableRow,
 } from "@/components/ui/table";
 import { Avatar, AvatarFallback } from "@/components/ui/avatar";
+import {
+  Drawer,
+  DrawerClose,
+  DrawerContent,
+  DrawerDescription,
+  DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
+  DrawerTrigger,
+} from "@/components/ui/drawer";
+import {
+  PencilIcon,
+  TrashIcon,
+  PlusIcon,
+  DocumentPlusIcon,
+} from "@heroicons/react/24/outline";
+import { Label } from "@/components/ui/label";
+import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
+import { Textarea } from "@/components/ui/textarea";
+
+import {
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from "@/components/ui/dialog";
 
 const data: Customer[] = [
   {
@@ -109,7 +138,7 @@ export type Customer = {
   id: string;
   nameKanji: string;
   nameKana: string;
-  gender: string;
+  gender: "男性" | "女性";
   birthDate: string;
   postalCode: string;
   address: string;
@@ -172,16 +201,19 @@ export const columns: ColumnDef<Customer>[] = [
     // 非表示カラム
     accessorKey: "nameKana",
     header: "ふりがな",
+    enableHiding: false,
   },
   {
     // 非表示カラム
     accessorKey: "gender",
     header: "性別",
+    enableHiding: false,
   },
   {
     // 非表示カラム
     accessorKey: "birthDate",
     header: "年齢",
+    enableHiding: false,
   },
   {
     accessorKey: "address",
@@ -203,18 +235,188 @@ export const columns: ColumnDef<Customer>[] = [
     // 非表示カラム
     accessorKey: "email",
     header: "メールアドレス",
+    enableHiding: false,
   },
   {
     // 非表示カラム
     accessorKey: "specialNotes",
     header: "特記事項",
+    enableHiding: false,
   },
   {
     // 非表示カラム
     accessorKey: "status",
     header: "ステータス",
+    enableHiding: false,
+  },
+  {
+    id: "actions",
+    enableHiding: false,
+    cell: ({ row }) => {
+      const customer = row.original;
+
+      return (
+        // <DropdownMenu>
+        //   <DropdownMenuTrigger asChild>
+        //     <Button variant="ghost" className="h-8 w-8 p-0">
+        //       <span className="sr-only">Open menu</span>
+        //       <MoreHorizontal className="h-4 w-4" />
+        //     </Button>
+        //   </DropdownMenuTrigger>
+        //   <DropdownMenuContent align="end">
+        //     <DropdownMenuItem>Edit</DropdownMenuItem>
+        //     <DropdownMenuSeparator />
+        //     <DropdownMenuItem>
+        //       Delete
+        //       <DropdownMenuShortcut>⌘⌫</DropdownMenuShortcut>
+        //     </DropdownMenuItem>
+        //   </DropdownMenuContent>
+        // </DropdownMenu>
+        <div className="space-x-2">
+          <Drawer>
+            <DrawerTrigger asChild>
+              <Button variant="outline">
+                <PencilIcon className="h-4 w-4" />
+              </Button>
+            </DrawerTrigger>
+            <DrawerContent>
+              <DrawerHeader className="text-left">
+                <DrawerTitle>Edit profile</DrawerTitle>
+                <DrawerDescription>
+                  Make changes to your profile here. Click save when you're
+                  done.
+                </DrawerDescription>
+              </DrawerHeader>
+              <ProfileForm className="px-4 grid items-start gap-4" />
+              {/* <DrawerFooter className="pt-2">
+                <DrawerClose asChild>
+                  <Button variant="outline">Cancel</Button>
+                </DrawerClose>
+              </DrawerFooter> */}
+            </DrawerContent>
+          </Drawer>
+
+          <Dialog>
+            <DialogTrigger asChild>
+              <Button variant="outline">
+                <TrashIcon className="h-4 w-4" />
+              </Button>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle>Are you sure absolutely sure?</DialogTitle>
+                <DialogDescription>
+                  This action cannot be undone. This will permanently delete
+                  your account and remove your data from our servers.
+                </DialogDescription>
+              </DialogHeader>
+            </DialogContent>
+          </Dialog>
+
+          {/* <Drawer>
+            <DrawerTrigger asChild>
+              <Button variant="outline">
+                <TrashIcon className="h-4 w-4" />
+              </Button>
+            </DrawerTrigger>
+            <DrawerContent>
+              <DrawerHeader className="text-left">
+                <DrawerTitle>Edit profile</DrawerTitle>
+                <DrawerDescription>
+                  <p>
+                    Make changes to customer profile here. Click save when
+                    you're done.
+                  </p>
+                </DrawerDescription>
+              </DrawerHeader>
+              <ProfileForm className="px-4 grid items-start gap-4" />
+              <DrawerFooter className="pt-2">
+                <DrawerClose asChild>
+                  <Button variant="outline">Cancel</Button>
+                </DrawerClose>
+              </DrawerFooter>
+            </DrawerContent>
+          </Drawer> */}
+        </div>
+      );
+    },
   },
 ];
+
+function ProfileForm({ className }: React.ComponentProps<"form">) {
+  return (
+    <form className="p-10">
+      <div className="grid grid-cols-3 gap-10">
+        <div>
+          <div>
+            <Label htmlFor="kana">ふりがな</Label>
+            <Input id="kana" placeholder="やまだたろう" defaultValue="" />
+          </div>
+          <div>
+            <Label htmlFor="name">名前</Label>
+            <Input id="name" placeholder="山田太郎" defaultValue="" />
+          </div>
+        </div>
+        <div>
+          <div>
+            <Label htmlFor="gender">性別</Label>
+            <RadioGroup className="flex items-center justify-start space-x-5 mb-4">
+              <div>
+                <RadioGroupItem value="male" id="male"></RadioGroupItem>
+                <Label htmlFor="male">男性</Label>
+              </div>
+              <div>
+                <RadioGroupItem value="female" id="female"></RadioGroupItem>
+                <Label htmlFor="female">女性</Label>
+              </div>
+            </RadioGroup>
+          </div>
+          <div>
+            <Label htmlFor="birthdate">誕生日</Label>
+            <Input
+              id="birthdate"
+              placeholder="仮に配置しています"
+              defaultValue=""
+            />
+          </div>
+        </div>
+        <div>
+          <div>
+            <Label htmlFor="phone">電話番号</Label>
+            <Input id="phone" placeholder="000-000-0000" defaultValue="" />
+          </div>
+          <div>
+            <Label htmlFor="mail">メール</Label>
+            <Input id="mail" placeholder="mail@domain" defaultValue="" />
+          </div>
+        </div>
+      </div>
+      <div className="grid grid-cols-2 gap-10">
+        <div>
+          <div>
+            <Label htmlFor="postal">郵便番号</Label>
+            <Input id="postal" placeholder="000-0000" defaultValue="" />
+          </div>
+          <div>
+            <Label htmlFor="address">住所</Label>
+            <Input id="address" placeholder="市町村名" defaultValue="" />
+          </div>
+        </div>
+        <div>
+          <Label htmlFor="notes">特記事項</Label>
+          <Textarea id="notes" placeholder="" defaultValue="" />
+        </div>
+      </div>
+
+      <div className="pt-10 flex items-center justify-between">
+        <Button type="submit">Save changes</Button>
+        <DrawerClose asChild>
+          <Button variant="outline">Cancel</Button>
+        </DrawerClose>
+      </div>
+    </form>
+  );
+}
 
 export function DataTableDemo() {
   const [sorting, setSorting] = React.useState<SortingState>([]);
@@ -256,6 +458,10 @@ export function DataTableDemo() {
   return (
     <div className="w-full">
       <div className="flex items-center py-4">
+        <Button variant="outline" className="gap-2">
+          <DocumentPlusIcon className="h-4 w-4" />
+          New
+        </Button>
         <Input
           placeholder="ふりがな検索..."
           value={
