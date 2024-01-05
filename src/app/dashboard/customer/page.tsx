@@ -1,3 +1,5 @@
+import { DataTableDemo } from "./datatable-demo";
+
 export default function Page() {
-  return <p>Customers Page</p>;
+  return <DataTableDemo />;
 }
