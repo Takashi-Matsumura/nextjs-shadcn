@@ -1,3 +1,5 @@
+import { DataTableDemo } from "@/app/ui/employee/datatable";
+
 export default function Page() {
-  return <p>Employee Page</p>;
+  return <DataTableDemo />;
 }
