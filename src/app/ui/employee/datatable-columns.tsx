@@ -4,10 +4,8 @@ import { Employee } from "./data/schema";
 
 import {
   Drawer,
-  DrawerClose,
   DrawerContent,
   DrawerDescription,
-  DrawerFooter,
   DrawerHeader,
   DrawerTitle,
   DrawerTrigger,
@@ -22,15 +20,11 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 
-import {
-  PencilIcon,
-  TrashIcon,
-  PlusIcon,
-  DocumentPlusIcon,
-} from "@heroicons/react/24/outline";
+import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
 
 import { Button } from "@/components/ui/button";
 import { EmployeeForm } from "./employeeForm";
+import { calculateAge } from "@/lib/dateUtils";
 
 export const columns: ColumnDef<Employee>[] = [
   {
@@ -51,6 +45,17 @@ export const columns: ColumnDef<Employee>[] = [
     accessorKey: "birthDate",
     header: "生年月日",
     enableHiding: false,
+    cell: ({ row }) => {
+      const birthDate = new Date(row.original.birthDate);
+      const age = calculateAge(birthDate);
+      return (
+        <div>
+          <p>
+            {age}歳 ({row.original.birthDate})
+          </p>
+        </div>
+      );
+    },
   },
   {
     accessorKey: "postalCode",
@@ -73,6 +78,9 @@ export const columns: ColumnDef<Employee>[] = [
     accessorKey: "status",
     header: "ステータス",
     enableHiding: false,
+    filterFn: (row, id, value) => {
+      return value.includes(row.getValue(id));
+    },
   },
   {
     id: "actions",
