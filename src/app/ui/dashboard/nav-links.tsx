@@ -6,6 +6,7 @@ import {
   DocumentDuplicateIcon,
   CalendarDaysIcon,
   UsersIcon,
+  QrCodeIcon,
 } from "@heroicons/react/24/outline";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -27,6 +28,7 @@ const links = [
   },
   { name: "Customers", href: "/dashboard/customer", icon: UserGroupIcon },
   { name: "Helpers", href: "/dashboard/employee", icon: UsersIcon },
+  { name: "QR Code", href: "/dashboard/qr-code", icon: QrCodeIcon },
 ];
 
 export default function NavLinks() {
