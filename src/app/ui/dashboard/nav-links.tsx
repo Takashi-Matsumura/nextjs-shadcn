@@ -27,7 +27,20 @@ const links = [
     icon: CalendarDaysIcon,
   },
   { name: "Customers", href: "/dashboard/customer", icon: UserGroupIcon },
-  { name: "Helpers", href: "/dashboard/employee", icon: UsersIcon },
+  { name: "Helpers", href: "/dashboard/employee", icon: UserGroupIcon },
+  {
+    name: "Admin",
+    href: "/dashboard/admin",
+    icon: UsersIcon,
+    children: [
+      { name: "Add User", href: "/dashboard/admin/add-user", icon: UsersIcon },
+      {
+        name: "Manage Permissions",
+        href: "/dashboard/admin/manage-permissions",
+        icon: UsersIcon,
+      },
+    ],
+  },
   { name: "QR Code", href: "/dashboard/qr-code", icon: QrCodeIcon },
 ];
 
@@ -52,6 +65,9 @@ export default function NavLinks() {
             <LinkIcon className="w-6" />
             <p className="hidden md:block">{link.name}</p>
           </Link>
+          {link.children && link.children?.map((childLink) => (
+            console.log(childLink);
+          ))}
         );
       })}
     </>
