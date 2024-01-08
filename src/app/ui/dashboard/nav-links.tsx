@@ -29,17 +29,14 @@ const links = [
   { name: "Customers", href: "/dashboard/customer", icon: UserGroupIcon },
   { name: "Helpers", href: "/dashboard/employee", icon: UserGroupIcon },
   {
-    name: "Admin",
-    href: "/dashboard/admin",
+    name: "Users",
+    href: "/dashboard/user",
     icon: UsersIcon,
-    children: [
-      { name: "Add User", href: "/dashboard/admin/add-user", icon: UsersIcon },
-      {
-        name: "Manage Permissions",
-        href: "/dashboard/admin/manage-permissions",
-        icon: UsersIcon,
-      },
-    ],
+  },
+  {
+    name: "Roles",
+    href: "/dashboard/role",
+    icon: UsersIcon,
   },
   { name: "QR Code", href: "/dashboard/qr-code", icon: QrCodeIcon },
 ];
