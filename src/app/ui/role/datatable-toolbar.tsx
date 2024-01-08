@@ -1,11 +1,6 @@
 import { Table } from "@tanstack/react-table";
 import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import {
-  FaceSmileIcon,
-  PauseCircleIcon,
-  PlusIcon,
-} from "@heroicons/react/24/outline";
+import { PlusIcon } from "@heroicons/react/24/outline";
 
 import {
   Drawer,
@@ -15,7 +10,7 @@ import {
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
-import { UserForm } from "./userForm";
+import { RoleForm } from "./roleForm";
 
 interface DataTableToolbarProps<TData> {
   table: Table<TData>;
@@ -41,16 +36,9 @@ export function DataTableToolbar<TData>({
                 Make changes to your profile here. Click save when you're done.
               </DrawerDescription>
             </DrawerHeader>
-            <UserForm className="px-4 grid items-start gap-4" />
+            <RoleForm className="px-4 grid items-start gap-4" />
           </DrawerContent>
         </Drawer>
-        <Input
-          placeholder="Email search..."
-          value={(table.getColumn("email")?.getFilterValue() as string) ?? ""}
-          onChange={(event) =>
-            table.getColumn("email")?.setFilterValue(event.target.value)
-          }
-        />
       </div>
     </div>
   );
