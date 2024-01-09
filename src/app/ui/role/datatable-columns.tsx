@@ -18,6 +18,8 @@ import {
   DialogHeader,
   DialogTitle,
   DialogTrigger,
+  DialogFooter,
+  DialogClose,
 } from "@/components/ui/dialog";
 
 import { PencilIcon, TrashIcon } from "@heroicons/react/24/outline";
@@ -71,7 +73,10 @@ export const columns: ColumnDef<Role>[] = [
                   done.
                 </DrawerDescription>
               </DrawerHeader>
-              <RoleForm className="px-4 grid items-start gap-4" />
+              <RoleForm
+                openType="edit"
+                className="px-4 grid items-start gap-4"
+              />
             </DrawerContent>
           </Drawer>
 
@@ -85,10 +90,16 @@ export const columns: ColumnDef<Role>[] = [
               <DialogHeader>
                 <DialogTitle>Are you sure absolutely sure?</DialogTitle>
                 <DialogDescription>
-                  This action cannot be undone. This will permanently delete
-                  your account and remove your data from our servers.
+                  選択したユーザーの権限情報を削除します。この操作は取り消せません。
                 </DialogDescription>
               </DialogHeader>
+              <DialogFooter className="sm:justify-start">
+                <DialogClose asChild>
+                  <Button type="button" variant="secondary">
+                    OK
+                  </Button>
+                </DialogClose>
+              </DialogFooter>
             </DialogContent>
           </Dialog>
         </div>
