@@ -35,13 +35,10 @@ export function DataTableToolbar<TData>({
             </Button>
           </DrawerTrigger>
           <DrawerContent>
-            <DrawerHeader className="text-left">
-              <DrawerTitle>Edit profile</DrawerTitle>
-              <DrawerDescription>
-                Make changes to your profile here. Click save when you are done.
-              </DrawerDescription>
-            </DrawerHeader>
-            <UserForm className="px-4 grid items-start gap-4" />
+            <UserForm
+              openType="create"
+              className="px-4 grid items-start gap-4"
+            />
           </DrawerContent>
         </Drawer>
         <Input

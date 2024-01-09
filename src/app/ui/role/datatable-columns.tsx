@@ -66,13 +66,6 @@ export const columns: ColumnDef<Role>[] = [
               </Button>
             </DrawerTrigger>
             <DrawerContent>
-              <DrawerHeader className="text-left">
-                <DrawerTitle>Edit profile</DrawerTitle>
-                <DrawerDescription>
-                  Make changes to your profile here. Click save when you are
-                  done.
-                </DrawerDescription>
-              </DrawerHeader>
               <RoleForm
                 openType="edit"
                 className="px-4 grid items-start gap-4"

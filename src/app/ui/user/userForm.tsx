@@ -1,79 +1,132 @@
+"use client";
+
+import * as React from "react";
+import { Check, ChevronsUpDown } from "lucide-react";
+
 import { Label } from "@/components/ui/label";
-import { Input } from "@/components/ui/input";
-import { Textarea } from "@/components/ui/textarea";
 import { Button } from "@/components/ui/button";
-import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { DrawerClose } from "@/components/ui/drawer";
+import { Switch } from "@/components/ui/switch";
+
+import { cn } from "@/lib/utils";
+import {
+  Command,
+  CommandEmpty,
+  CommandGroup,
+  CommandInput,
+  CommandItem,
+} from "@/components/ui/command";
+import {
+  Popover,
+  PopoverContent,
+  PopoverTrigger,
+} from "@/components/ui/popover";
+
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 
 type UserFormProps = {
   className?: string;
   // 他のpropsもここに追加します
+  openType: "create" | "edit";
 };
 
-export function UserForm({ className }: UserFormProps) {
+export function UserForm({ openType }: UserFormProps) {
+  const frameworks = [
+    {
+      value: "next.js",
+      label: "Aさん",
+    },
+    {
+      value: "sveltekit",
+      label: "Bさん",
+    },
+    {
+      value: "nuxt.js",
+      label: "Cさん",
+    },
+    {
+      value: "remix",
+      label: "Dさん",
+    },
+    {
+      value: "astro",
+      label: "Eさん",
+    },
+  ];
+
   return (
     <form className="p-10">
-      <div className="grid grid-cols-3 gap-10">
-        <div>
-          <div>
-            <Label htmlFor="kana">ふりがな</Label>
-            <Input id="kana" placeholder="やまだたろう" defaultValue="" />
+      <Card>
+        <CardHeader>
+          <CardTitle>
+            {openType === "create" ? "Create user" : "Edit user"}
+          </CardTitle>
+          <CardDescription>note</CardDescription>
+        </CardHeader>
+        <CardContent className="flex items-center justify-between">
+          <div className="flex space-x-4 items-center">
+            <Label htmlFor="user">Select User</Label>
+            <Popover>
+              <PopoverTrigger asChild>
+                <Button
+                  variant="outline"
+                  role="combobox"
+                  className="w-[200px] justify-between"
+                >
+                  {/* {value
+                    ? frameworks.find((framework) => framework.value === value)
+                        ?.label
+                    : "Select framework..."} */}
+                  <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
+                </Button>
+              </PopoverTrigger>
+              <PopoverContent className="w-[200px] p-0">
+                <Command>
+                  <CommandInput placeholder="Search framework..." />
+                  <CommandEmpty>No framework found.</CommandEmpty>
+                  <CommandGroup>
+                    {frameworks.map((framework) => (
+                      <CommandItem
+                        key={framework.value}
+                        value={framework.value}
+                        onSelect={(currentValue) => {
+                          // setValue(currentValue === value ? "" : currentValue);
+                          // setOpen(false);
+                        }}
+                      >
+                        {/* <Check
+                          className={cn(
+                            "mr-2 h-4 w-4",
+                            value === framework.value
+                              ? "opacity-100"
+                              : "opacity-0"
+                          )}
+                        /> */}
+                        {framework.label}
+                      </CommandItem>
+                    ))}
+                  </CommandGroup>
+                </Command>
+              </PopoverContent>
+            </Popover>
           </div>
-          <div>
-            <Label htmlFor="name">名前</Label>
-            <Input id="name" placeholder="山田太郎" defaultValue="" />
+          <div className="flex space-x-4 items-center">
+            <Switch />
+            <Label htmlFor="manager">Manager</Label>
           </div>
-        </div>
-        <div>
-          <div>
-            <Label htmlFor="gender">性別</Label>
-            <RadioGroup className="flex items-center justify-start space-x-5 mb-4">
-              <div>
-                <RadioGroupItem value="male" id="male"></RadioGroupItem>
-                <Label htmlFor="male">男性</Label>
-              </div>
-              <div>
-                <RadioGroupItem value="female" id="female"></RadioGroupItem>
-                <Label htmlFor="female">女性</Label>
-              </div>
-            </RadioGroup>
+          <div className="flex space-x-4 items-center">
+            <Switch />
+            <Label htmlFor="member">Member</Label>
           </div>
-          <div>
-            <Label htmlFor="birthdate">誕生日</Label>
-            <Input
-              id="birthdate"
-              placeholder="仮に配置しています"
-              defaultValue=""
-            />
-          </div>
-        </div>
-        <div>
-          <div>
-            <Label htmlFor="phone">電話番号</Label>
-            <Input id="phone" placeholder="000-000-0000" defaultValue="" />
-          </div>
-          <div>
-            <Label htmlFor="mail">メール</Label>
-            <Input id="mail" placeholder="mail@domain" defaultValue="" />
-          </div>
-        </div>
-      </div>
-      <div className="grid grid-cols-2 gap-10">
-        <div>
-          <div>
-            <Label htmlFor="postal">郵便番号</Label>
-            <Input id="postal" placeholder="000-0000" defaultValue="" />
-          </div>
-          <div>
-            <Label htmlFor="address">住所</Label>
-            <Input id="address" placeholder="市町村名" defaultValue="" />
-          </div>
-        </div>
-        <div>
-          <Label htmlFor="notes">特記事項</Label>
-          <Textarea id="notes" placeholder="" defaultValue="" />
-        </div>
-      </div>
+        </CardContent>
+      </Card>
 
       <div className="pt-10 flex items-center justify-between">
         <Button type="submit">Save changes</Button>
