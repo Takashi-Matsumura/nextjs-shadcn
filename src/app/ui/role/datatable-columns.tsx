@@ -67,7 +67,7 @@ export const columns: ColumnDef<Role>[] = [
               <DrawerHeader className="text-left">
                 <DrawerTitle>Edit profile</DrawerTitle>
                 <DrawerDescription>
-                  Make changes to your profile here. Click save when you're
+                  Make changes to your profile here. Click save when you are
                   done.
                 </DrawerDescription>
               </DrawerHeader>
