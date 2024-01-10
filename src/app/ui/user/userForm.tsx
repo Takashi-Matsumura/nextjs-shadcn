@@ -30,6 +30,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
+import { Input } from "@/components/ui/input";
 
 type UserFormProps = {
   className?: string;
@@ -38,29 +39,6 @@ type UserFormProps = {
 };
 
 export function UserForm({ openType }: UserFormProps) {
-  const frameworks = [
-    {
-      value: "next.js",
-      label: "Aさん",
-    },
-    {
-      value: "sveltekit",
-      label: "Bさん",
-    },
-    {
-      value: "nuxt.js",
-      label: "Cさん",
-    },
-    {
-      value: "remix",
-      label: "Dさん",
-    },
-    {
-      value: "astro",
-      label: "Eさん",
-    },
-  ];
-
   return (
     <form className="p-10">
       <Card>
@@ -72,58 +50,16 @@ export function UserForm({ openType }: UserFormProps) {
         </CardHeader>
         <CardContent className="flex items-center justify-between">
           <div className="flex space-x-4 items-center">
-            <Label htmlFor="user">Select User</Label>
-            <Popover>
-              <PopoverTrigger asChild>
-                <Button
-                  variant="outline"
-                  role="combobox"
-                  className="w-[200px] justify-between"
-                >
-                  {/* {value
-                    ? frameworks.find((framework) => framework.value === value)
-                        ?.label
-                    : "Select framework..."} */}
-                  <ChevronsUpDown className="ml-2 h-4 w-4 shrink-0 opacity-50" />
-                </Button>
-              </PopoverTrigger>
-              <PopoverContent className="w-[200px] p-0">
-                <Command>
-                  <CommandInput placeholder="Search framework..." />
-                  <CommandEmpty>No framework found.</CommandEmpty>
-                  <CommandGroup>
-                    {frameworks.map((framework) => (
-                      <CommandItem
-                        key={framework.value}
-                        value={framework.value}
-                        onSelect={(currentValue) => {
-                          // setValue(currentValue === value ? "" : currentValue);
-                          // setOpen(false);
-                        }}
-                      >
-                        {/* <Check
-                          className={cn(
-                            "mr-2 h-4 w-4",
-                            value === framework.value
-                              ? "opacity-100"
-                              : "opacity-0"
-                          )}
-                        /> */}
-                        {framework.label}
-                      </CommandItem>
-                    ))}
-                  </CommandGroup>
-                </Command>
-              </PopoverContent>
-            </Popover>
+            <Label htmlFor="name">Username</Label>
+            <Input type="text" id="name" />
           </div>
           <div className="flex space-x-4 items-center">
-            <Switch />
-            <Label htmlFor="manager">Manager</Label>
+            <Label htmlFor="email">Email</Label>
+            <Input type="email" id="email" />
           </div>
           <div className="flex space-x-4 items-center">
-            <Switch />
-            <Label htmlFor="member">Member</Label>
+            <Label htmlFor="password">Password</Label>
+            <Input type="password" id="password" />
           </div>
         </CardContent>
       </Card>
