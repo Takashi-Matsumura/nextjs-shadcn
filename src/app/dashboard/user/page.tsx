@@ -10,21 +10,7 @@ export default async function Page() {
   console.log(data);
   const users = await fetchUsers();
   console.log(users);
-  // useEffect(() => {
-  //   const data = fetchRevenue();
-  //   console.log("User Page");
-  // }, []);
-  // const [data, setData] = useState<User[] | null>(null);
-  // useEffect(() => {
-  //   async function fetchData() {
-  //     const result = await fetchUsers();
-  //     setData(result);
-  //   }
-  //   fetchData();
-  // }, []);
-  // if (!data) {
-  //   return <div>Loading...</div>;
-  // }
+
   // return <DataTableQuery data={data} />;
   // return <DataTableQuery />;
   return (
