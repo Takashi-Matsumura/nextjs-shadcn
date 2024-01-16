@@ -46,8 +46,6 @@ export const columns: ColumnDef<User>[] = [
     id: "actions",
     enableHiding: false,
     cell: ({ row }) => {
-      const customer = row.original;
-
       return (
         <div className="space-x-2">
           <Drawer>
@@ -59,6 +57,7 @@ export const columns: ColumnDef<User>[] = [
             <DrawerContent>
               <UserForm
                 openType="edit"
+                user={row.original}
                 className="px-4 grid items-start gap-4"
               />
             </DrawerContent>

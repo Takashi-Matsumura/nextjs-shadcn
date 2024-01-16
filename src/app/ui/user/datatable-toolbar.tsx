@@ -37,6 +37,7 @@ export function DataTableToolbar<TData>({
           <DrawerContent>
             <UserForm
               openType="create"
+              user={{ id: "", name: "", email: "", password: "" }}
               className="px-4 grid items-start gap-4"
             />
           </DrawerContent>

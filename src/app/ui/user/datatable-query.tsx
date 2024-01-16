@@ -1,7 +1,6 @@
 "use client";
 
 import { columns } from "./datatable-columns";
-import { data } from "./data/data";
 
 import * as React from "react";
 import {
@@ -30,7 +29,6 @@ import {
 
 import { DataTableToolbar } from "./datatable-toolbar";
 
-import { fetchUsers } from "@/app/lib/data";
 import { User } from "./data/schema";
 
 // Define the type of the data prop

@@ -34,14 +34,18 @@ import { Input } from "@/components/ui/input";
 import { useFormState } from "react-dom";
 import { createUser, State } from "@/lib/actions";
 import { init } from "next/dist/compiled/webpack/webpack";
+import { User } from "./data/schema";
 
 type UserFormProps = {
   className?: string;
   // 他のpropsもここに追加します
   openType: "create" | "edit";
+  user: User | null;
 };
 
-export function UserForm({ openType }: UserFormProps) {
+export function UserForm({ openType, user }: UserFormProps) {
+  //console.log(user);
+
   const initialState = {
     errors: {
       name: [],
@@ -50,7 +54,10 @@ export function UserForm({ openType }: UserFormProps) {
     },
     message: "",
   };
+
   const action = async (state: State) => {
+    console.log(state);
+
     const formData = new FormData();
     formData.append("name", state.name ?? "");
     formData.append("email", state.email ?? "");
@@ -74,15 +81,15 @@ export function UserForm({ openType }: UserFormProps) {
         <CardContent className="flex items-center justify-center gap-10">
           <div className="flex space-x-4 items-center">
             <Label htmlFor="name">Username</Label>
-            <Input type="text" id="name" />
+            <Input type="text" id="name" value={user?.name} />
           </div>
           <div className="flex space-x-4 items-center">
             <Label htmlFor="email">Email</Label>
-            <Input type="email" id="email" />
+            <Input type="email" id="email" value={user?.email} />
           </div>
           <div className="flex space-x-4 items-center">
             <Label htmlFor="password">Password</Label>
-            <Input type="password" id="password" />
+            <Input type="password" id="password" value={user?.password} />
           </div>
         </CardContent>
       </Card>
