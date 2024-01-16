@@ -2,14 +2,7 @@ import { ColumnDef } from "@tanstack/react-table";
 
 import { User } from "./data/schema";
 
-import {
-  Drawer,
-  DrawerContent,
-  DrawerDescription,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/components/ui/drawer";
+import { Drawer, DrawerContent, DrawerTrigger } from "@/components/ui/drawer";
 
 import {
   Dialog,

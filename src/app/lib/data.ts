@@ -123,24 +123,26 @@ export async function fetchFilteredInvoices(
   }
 }
 
-export async function fetchInvoicesPages(query: string) {
+//このメソッドを使って、ページネーションのために必要なページ数を取得します。
+export async function fetchUsersPages() {
   try {
-    const count = await sql`SELECT COUNT(*)
-    FROM invoices
-    JOIN customers ON invoices.customer_id = customers.id
-    WHERE
-      customers.name ILIKE ${`%${query}%`} OR
-      customers.email ILIKE ${`%${query}%`} OR
-      invoices.amount::text ILIKE ${`%${query}%`} OR
-      invoices.date::text ILIKE ${`%${query}%`} OR
-      invoices.status ILIKE ${`%${query}%`}
-  `;
+    //   const count = await sql`SELECT COUNT(*)
+    //   FROM invoices
+    //   JOIN customers ON invoices.customer_id = customers.id
+    //   WHERE
+    //     customers.name ILIKE ${`%${query}%`} OR
+    //     customers.email ILIKE ${`%${query}%`} OR
+    //     invoices.amount::text ILIKE ${`%${query}%`} OR
+    //     invoices.date::text ILIKE ${`%${query}%`} OR
+    //     invoices.status ILIKE ${`%${query}%`}
+    // `;
+    const count = await sql`SELECT COUNT(*) FROM invoices`;
 
     const totalPages = Math.ceil(Number(count.rows[0].count) / ITEMS_PER_PAGE);
     return totalPages;
   } catch (error) {
     console.error("Database Error:", error);
-    throw new Error("Failed to fetch total number of invoices.");
+    throw new Error("Failed to fetch total number of users.");
   }
 }
 
@@ -231,15 +233,19 @@ export async function fetchFilteredCustomers(query: string) {
 //   }
 // }
 
-export async function fetchUser() {
+export async function fetchUsers() {
   try {
+    // console.log("Fetching user data...");
+    // await new Promise((resolve) => setTimeout(resolve, 3000));
+
     console.log("Fetching user data...");
-    await new Promise((resolve) => setTimeout(resolve, 3000));
+    const users = await sql<User>`SELECT * FROM users;`;
+    // console.log("Data fetch completed after 3 seconds.");
 
-    const data = await sql<Revenue>`SELECT * FROM users`;
-    console.log("Data fetch completed after 3 seconds.");
+    //console.log("hello world-----------------");
+    //console.log(users);
 
-    return data.rows;
+    return users.rows;
   } catch (error) {
     console.error("Database Error:", error);
     throw new Error("Failed to fetch user data.");

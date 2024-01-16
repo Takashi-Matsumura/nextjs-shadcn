@@ -31,6 +31,9 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
+import { useFormState } from "react-dom";
+import { createUser, State } from "@/lib/actions";
+import { init } from "next/dist/compiled/webpack/webpack";
 
 type UserFormProps = {
   className?: string;
@@ -39,8 +42,28 @@ type UserFormProps = {
 };
 
 export function UserForm({ openType }: UserFormProps) {
+  const initialState = {
+    errors: {
+      name: [],
+      email: [],
+      password: [],
+    },
+    message: "",
+  };
+  const action = async (state: State) => {
+    const formData = new FormData();
+    formData.append("name", state.name ?? "");
+    formData.append("email", state.email ?? "");
+    formData.append("password", state.password ?? "");
+
+    const result = await createUser(state, formData);
+    return result;
+  };
+
+  const [state, dispatch] = useFormState(action, initialState);
+
   return (
-    <form className="p-10">
+    <form className="p-10" action={dispatch}>
       <Card>
         <CardHeader>
           <CardTitle>
@@ -48,7 +71,7 @@ export function UserForm({ openType }: UserFormProps) {
           </CardTitle>
           <CardDescription>note</CardDescription>
         </CardHeader>
-        <CardContent className="flex items-center justify-between">
+        <CardContent className="flex items-center justify-center gap-10">
           <div className="flex space-x-4 items-center">
             <Label htmlFor="name">Username</Label>
             <Input type="text" id="name" />
