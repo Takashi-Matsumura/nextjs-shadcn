@@ -6,8 +6,6 @@ import { useEffect, useState } from "react";
 import { User } from "@/app/lib/definitions";
 
 export default async function Page() {
-  const data = await fetchRevenue();
-  console.log(data);
   const users = await fetchUsers();
   console.log(users);
 
