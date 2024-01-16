@@ -240,10 +240,8 @@ export async function fetchUsers() {
 
     console.log("Fetching user data...");
     const users = await sql<User>`SELECT * FROM users;`;
-    // console.log("Data fetch completed after 3 seconds.");
 
-    //console.log("hello world-----------------");
-    //console.log(users);
+    // console.log("Data fetch completed after 3 seconds.");
 
     return users.rows;
   } catch (error) {

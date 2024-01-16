@@ -38,11 +38,7 @@ interface DataTableQueryProps {
   data: User[]; // Use the User type from your definitions
 }
 
-//export function DataTableQuery({ data }: DataTableQueryProps) {
-//const { query } = props;
-export async function DataTableQuery() {
-  console.log("DataTableQuery");
-
+export function DataTableQuery({ data }: DataTableQueryProps) {
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
@@ -50,36 +46,6 @@ export async function DataTableQuery() {
     []
   );
   const [sorting, setSorting] = React.useState<SortingState>([]);
-
-  //const data = await fetchUsers(query);
-  const data = await fetchUsers();
-  console.log("data", data);
-
-  // interface User {
-  //   id: string;
-  //   name: string;
-  //   email: string;
-  //   password: string;
-  //   status?: string; // statusはオプショナルになりました
-  // }
-
-  // interface ColumnDef<T extends object, V> {
-  //   // ColumnDefの定義
-  // }
-
-  // interface ExtendedColumnDef<T extends object, V> extends ColumnDef<T, V> {
-  //   id: string;
-  //   accessorFn: (row: T) => V;
-  //   accessorKey: string;
-  // }
-
-  // const columns: ColumnDef<User, string>[] = [
-  //   {
-  //     id: "name",
-  //     accessorFn: (row: User) => row.name,
-  //     accessorKey: "name",
-  //   },
-  // ];
 
   const table = useReactTable({
     data,
