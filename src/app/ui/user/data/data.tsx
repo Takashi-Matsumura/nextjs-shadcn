@@ -6,6 +6,6 @@ export const data: User[] = [
     name: "User",
     email: "user@nextmail.com",
     password: "$2b$10$8ysLVxCQ.k.gAAmKq00ltuPEMx32k5qnWHtxJ9gnyadTsFt0zD22O",
-    status: "active",
+    //status: "active",
   },
 ];
