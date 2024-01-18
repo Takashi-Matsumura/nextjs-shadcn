@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { inter, noto } from "@/app/ui/fonts";
 import "@/app/ui/globals.css";
+import { Toaster } from "@/components/ui/toaster";
 
 export const metadata: Metadata = {
   title: "Create Next App",
@@ -14,7 +15,10 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${noto.className} antialiased`}>{children}</body>
+      <body className={`${noto.className} antialiased`}>
+        {children}
+        <Toaster />
+      </body>
     </html>
   );
 }

@@ -283,6 +283,8 @@ type State = {
 };
 
 export async function createUser(prevState: State, formData: FormData) {
+  console.log("createUser pushed");
+
   const validatedFields = FormSchema.safeParse({
     name: formData.get("name"),
     email: formData.get("email"),
@@ -297,10 +299,6 @@ export async function createUser(prevState: State, formData: FormData) {
   }
 
   const { name, email, password } = validatedFields.data;
-
-  // const name = formData.get("name");
-  // const email = formData.get("email");
-  // const password = formData.get("password");
 
   try {
     const sql =
