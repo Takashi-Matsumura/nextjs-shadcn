@@ -32,9 +32,9 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { useFormState } from "react-dom";
-import { createUser, State } from "@/lib/actions";
 import { init } from "next/dist/compiled/webpack/webpack";
 import { User } from "./data/schema";
+import { createUser } from "@/app/lib/data";
 
 type UserFormProps = {
   className?: string;
@@ -45,6 +45,9 @@ type UserFormProps = {
 
 export function UserForm({ openType, user }: UserFormProps) {
   //console.log(user);
+  // if (user) {
+  //   const { id, name, email, password } = user;
+  // }
 
   const initialState = {
     errors: {
@@ -53,6 +56,18 @@ export function UserForm({ openType, user }: UserFormProps) {
       password: [],
     },
     message: "",
+  };
+
+  type State = {
+    name?: string;
+    email?: string;
+    password?: string;
+    errors?: {
+      name?: string[];
+      email?: string[];
+      password?: string[];
+    };
+    message?: string | null;
   };
 
   const action = async (state: State) => {
@@ -81,15 +96,19 @@ export function UserForm({ openType, user }: UserFormProps) {
         <CardContent className="flex items-center justify-center gap-10">
           <div className="flex space-x-4 items-center">
             <Label htmlFor="name">Username</Label>
-            <Input type="text" id="name" value={user?.name} />
+            <Input type="text" id="name" defaultValue={user?.name} />
           </div>
           <div className="flex space-x-4 items-center">
             <Label htmlFor="email">Email</Label>
-            <Input type="email" id="email" value={user?.email} />
+            <Input type="email" id="email" defaultValue={user?.email} />
           </div>
           <div className="flex space-x-4 items-center">
             <Label htmlFor="password">Password</Label>
-            <Input type="password" id="password" value={user?.password} />
+            <Input
+              type="password"
+              id="password"
+              defaultValue={user?.password}
+            />
           </div>
         </CardContent>
       </Card>

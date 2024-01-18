@@ -9,6 +9,9 @@ import {
   Revenue,
 } from "./definitions";
 import { formatCurrency } from "./utils";
+import { z } from "zod";
+import { revalidatePath } from "next/cache";
+import { redirect } from "next/navigation";
 
 export async function fetchRevenue() {
   // Add noStore() here prevent the response from being cached.
@@ -248,4 +251,73 @@ export async function fetchUsers() {
     console.error("Database Error:", error);
     throw new Error("Failed to fetch user data.");
   }
+}
+
+// const FormSchema = z.object({
+const FormSchema = z.object({
+  id: z.string(),
+  name: z.string({
+    invalid_type_error: "Please input a user name",
+  }),
+  email: z.string({
+    invalid_type_error: "Please input a email address",
+  }),
+  password: z.string({
+    invalid_type_error: "Please input a user password",
+  }),
+});
+
+const CreateUser = FormSchema.omit({ id: true });
+
+// This is temporary until @types/react-dom is updated
+type State = {
+  name?: string;
+  email?: string;
+  password?: string;
+  errors?: {
+    name?: string[];
+    email?: string[];
+    password?: string[];
+  };
+  message?: string | null;
+};
+
+export async function createUser(prevState: State, formData: FormData) {
+  const validatedFields = FormSchema.safeParse({
+    name: formData.get("name"),
+    email: formData.get("email"),
+    password: formData.get("password"),
+  });
+
+  if (!validatedFields.success) {
+    return {
+      errors: validatedFields.error.flatten().fieldErrors,
+      message: "Missing Fields. Failed to Create User.",
+    };
+  }
+
+  const { name, email, password } = validatedFields.data;
+
+  // const name = formData.get("name");
+  // const email = formData.get("email");
+  // const password = formData.get("password");
+
+  try {
+    const sql =
+      "INSERT INTO users (name, email, password) VALUES (${name}, ${email}, ${password})";
+    console.log(sql);
+    // await sql`
+    //   INSERT INTO users (name, email, password)
+    //   VALUES (${name}, ${email}, ${password})
+    // `;
+  } catch (error) {
+    // If a database error occurs, return a more specific error.
+    return {
+      message: "Database Error: Failed to Create User.",
+    };
+  }
+
+  // Revalidate the cache for the invoices page and redirect the user.
+  revalidatePath("/dashboard/user");
+  redirect("/dashboard/user");
 }

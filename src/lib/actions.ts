@@ -7,66 +7,66 @@ import { redirect } from "next/navigation";
 import { signIn } from "@/lib/authentication/auth";
 import { AuthError } from "next-auth";
 
-const FormSchema = z.object({
-  id: z.string(),
-  name: z.string(),
-  email: z.string().email(),
-  password: z
-    .string()
-    .min(8, { message: "Password must be at least 8 characters long." }),
-});
+// const FormSchema = z.object({
+//   id: z.string(),
+//   name: z.string(),
+//   email: z.string().email(),
+//   password: z
+//     .string()
+//     .min(8, { message: "Password must be at least 8 characters long." }),
+// });
 
-const CreateUser = FormSchema.omit({ id: true });
+// const CreateUser = FormSchema.omit({ id: true });
 
-// This is temporary until @types/react-dom is updated
-export type State = {
-  name?: string;
-  email?: string;
-  password?: string;
-  errors?: {
-    name?: string[];
-    email?: string[];
-    password?: string[];
-  };
-  message?: string | null;
-};
+// // This is temporary until @types/react-dom is updated
+// export type State = {
+//   name?: string;
+//   email?: string;
+//   password?: string;
+//   errors?: {
+//     name?: string[];
+//     email?: string[];
+//     password?: string[];
+//   };
+//   message?: string | null;
+// };
 
-export async function createUser(prevState: State, formData: FormData) {
-  // Validate form fields using Zod
-  const validatedFields = CreateUser.safeParse({
-    name: formData.get("name"),
-    email: formData.get("email"),
-    password: formData.get("password"),
-  });
+// export async function createUser(prevState: State, formData: FormData) {
+//   // Validate form fields using Zod
+//   const validatedFields = CreateUser.safeParse({
+//     name: formData.get("name"),
+//     email: formData.get("email"),
+//     password: formData.get("password"),
+//   });
 
-  // If form validation fails, return errors early. Otherwise, continue.
-  if (!validatedFields.success) {
-    return {
-      errors: validatedFields.error.flatten().fieldErrors,
-      message: "Missing Fields. Failed to Create User.",
-    };
-  }
+//   // If form validation fails, return errors early. Otherwise, continue.
+//   if (!validatedFields.success) {
+//     return {
+//       errors: validatedFields.error.flatten().fieldErrors,
+//       message: "Missing Fields. Failed to Create User.",
+//     };
+//   }
 
-  // Prepare data for insertion into the database
-  const { name, email, password } = validatedFields.data;
+//   // Prepare data for insertion into the database
+//   const { name, email, password } = validatedFields.data;
 
-  // Insert data into the database
-  try {
-    await sql`
-      INSERT INTO users (name, email, password)
-      VALUES (${name}, ${email}, ${password})
-    `;
-  } catch (error) {
-    // If a database error occurs, return a more specific error.
-    return {
-      message: "Database Error: Failed to Create User.",
-    };
-  }
+//   // Insert data into the database
+//   try {
+//     await sql`
+//       INSERT INTO users (name, email, password)
+//       VALUES (${name}, ${email}, ${password})
+//     `;
+//   } catch (error) {
+//     // If a database error occurs, return a more specific error.
+//     return {
+//       message: "Database Error: Failed to Create User.",
+//     };
+//   }
 
-  // Revalidate the cache for the invoices page and redirect the user.
-  revalidatePath("/dashboard/user");
-  redirect("/dashboard/user");
-}
+//   // Revalidate the cache for the invoices page and redirect the user.
+//   revalidatePath("/dashboard/user");
+//   redirect("/dashboard/user");
+// }
 
 // // Use Zod to update the expected types
 // const UpdateInvoice = FormSchema.omit({ id: true, date: true });
