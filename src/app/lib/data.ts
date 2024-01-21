@@ -300,9 +300,9 @@ export async function createUser(data: z.infer<typeof FormSchema>) {
     const hashedPassword = await bcrypt.hash(userpassword, 10);
     console.log("insert user data..." + username + useremail + hashedPassword);
 
-    //const client = await db.connect();
+    const client = await db.connect();
 
-    await sql`
+    await client.sql`
         INSERT INTO users (name, email, password)
         VALUES (${username}, ${useremail}, ${hashedPassword});
       `;
