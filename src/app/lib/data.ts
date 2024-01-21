@@ -1,4 +1,10 @@
 import { sql, db } from "@vercel/postgres";
+
+console.log({
+  POSTGRES_URL: process.env.POSTGRES_URL,
+  POSTGRES_URL_NON_POOLING: process.env.POSTGRES_URL_NON_POOLING,
+});
+
 import {
   CustomerField,
   CustomersTableType,
@@ -246,7 +252,7 @@ export async function fetchUsers() {
     // await new Promise((resolve) => setTimeout(resolve, 3000));
 
     // From chapter8
-    //noStore();
+    noStore();
 
     const users = await sql<User>`SELECT * FROM users;`;
     console.log("Fetching user data..." + users.rows.length);
@@ -300,9 +306,9 @@ export async function createUser(data: z.infer<typeof FormSchema>) {
     const hashedPassword = await bcrypt.hash(userpassword, 10);
     console.log("insert user data..." + username + useremail + hashedPassword);
 
-    const client = await db.connect();
+    //const client = await db.connect();
 
-    await client.sql`
+    await sql`
         INSERT INTO users (name, email, password)
         VALUES (${username}, ${useremail}, ${hashedPassword});
       `;
