@@ -1,4 +1,4 @@
-import { sql } from "@vercel/postgres";
+import { sql, db } from "@vercel/postgres";
 import {
   CustomerField,
   CustomersTableType,
@@ -12,6 +12,10 @@ import { formatCurrency } from "./utils";
 import { z } from "zod";
 import { revalidatePath } from "next/cache";
 import { redirect } from "next/navigation";
+import bcrypt from "bcryptjs";
+import { notStrictEqual } from "assert";
+
+import { unstable_noStore as noStore } from "next/cache";
 
 export async function fetchRevenue() {
   // Add noStore() here prevent the response from being cached.
@@ -241,8 +245,11 @@ export async function fetchUsers() {
     // console.log("Fetching user data...");
     // await new Promise((resolve) => setTimeout(resolve, 3000));
 
-    console.log("Fetching user data...");
+    // From chapter8
+    noStore();
+
     const users = await sql<User>`SELECT * FROM users;`;
+    console.log("Fetching user data..." + users.rows.length);
 
     // console.log("Data fetch completed after 3 seconds.");
 
@@ -253,69 +260,99 @@ export async function fetchUsers() {
   }
 }
 
-// const FormSchema = z.object({
+// const formSchema = z.object({
+//   name: z.string({
+//     invalid_type_error: "Please input a user name",
+//   }),
+//   email: z.string({
+//     invalid_type_error: "Please input a email address",
+//   }),
+//   password: z.string({
+//     invalid_type_error: "Please input a user password",
+//   }),
+// });
+
 const FormSchema = z.object({
-  id: z.string(),
-  name: z.string({
-    invalid_type_error: "Please input a user name",
+  username: z.string().min(2, {
+    message: "Username must be at least 2 characters.",
   }),
-  email: z.string({
-    invalid_type_error: "Please input a email address",
-  }),
-  password: z.string({
-    invalid_type_error: "Please input a user password",
+  useremail: z.string().email({ message: "Invalid email address." }),
+  userpassword: z.string().min(8, {
+    message: "Password must be at least 8 characters.",
   }),
 });
 
-const CreateUser = FormSchema.omit({ id: true });
-
-// This is temporary until @types/react-dom is updated
-type State = {
-  name?: string;
-  email?: string;
-  password?: string;
-  errors?: {
-    name?: string[];
-    email?: string[];
-    password?: string[];
-  };
-  message?: string | null;
-};
-
-export async function createUser(prevState: State, formData: FormData) {
-  console.log("createUser pushed");
-
-  const validatedFields = FormSchema.safeParse({
-    name: formData.get("name"),
-    email: formData.get("email"),
-    password: formData.get("password"),
-  });
+export async function createUser(data: z.infer<typeof FormSchema>) {
+  // /values: z.infer<typeof FormSchema>
+  const validatedFields = FormSchema.safeParse(data);
 
   if (!validatedFields.success) {
+    console.log("Missing Fields. Failed to Create User.");
     return {
       errors: validatedFields.error.flatten().fieldErrors,
       message: "Missing Fields. Failed to Create User.",
     };
   }
 
-  const { name, email, password } = validatedFields.data;
+  const { username, useremail, userpassword } = validatedFields.data;
 
   try {
-    const sql =
-      "INSERT INTO users (name, email, password) VALUES (${name}, ${email}, ${password})";
-    console.log(sql);
-    // await sql`
-    //   INSERT INTO users (name, email, password)
-    //   VALUES (${name}, ${email}, ${password})
-    // `;
+    const hashedPassword = await bcrypt.hash(userpassword, 10);
+    console.log("insert user data..." + username + useremail + hashedPassword);
+
+    //const client = await db.connect();
+
+    await sql`
+        INSERT INTO users (name, email, password)
+        VALUES (${username}, ${useremail}, ${hashedPassword});
+      `;
   } catch (error) {
+    console.error("Database Error:", error);
+    // console.log("Database Error:", error);
     // If a database error occurs, return a more specific error.
     return {
       message: "Database Error: Failed to Create User.",
     };
   }
 
-  // Revalidate the cache for the invoices page and redirect the user.
   revalidatePath("/dashboard/user");
   redirect("/dashboard/user");
 }
+
+// export async function createUser(prevState: State, formData: FormData) {
+//   console.log("createUser pushed");
+
+//   const validatedFields = FormSchema.safeParse({
+//     name: formData.get("name"),
+//     email: formData.get("email"),
+//     password: formData.get("password"),
+//   });
+
+//   if (!validatedFields.success) {
+//     return {
+//       errors: validatedFields.error.flatten().fieldErrors,
+//       message: "Missing Fields. Failed to Create User.",
+//     };
+//   }
+
+//   const { name, email, password } = validatedFields.data;
+
+//   try {
+//     const sql =
+//       "INSERT INTO users (name, email, password) VALUES (${name}, ${email}, ${password})";
+//     console.log(sql);
+//     // await sql`
+//     //   INSERT INTO users (name, email, password)
+//     //   VALUES (${name}, ${email}, ${password})
+//     // `;
+//   } catch (error) {
+//     // If a database error occurs, return a more specific error.
+//     return {
+//       message: "Database Error: Failed to Create User.",
+//     };
+//   }
+
+//   // Revalidate the cache for the invoices page and redirect the user.
+//   revalidatePath("/dashboard/user");
+//   redirect("/dashboard/user");
+// }

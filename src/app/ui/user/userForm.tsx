@@ -62,66 +62,50 @@ const FormSchema = z.object({
   username: z.string().min(2, {
     message: "Username must be at least 2 characters.",
   }),
+  useremail: z.string().email({ message: "Invalid email address." }),
+  userpassword: z.string().min(8, {
+    message: "Password must be at least 8 characters.",
+  }),
 });
 
-export function InputForm() {
-  const form = useForm<z.infer<typeof FormSchema>>({
-    resolver: zodResolver(FormSchema),
-    defaultValues: {
-      username: "",
-    },
-  });
-}
-
 export function UserForm({ openType, user }: UserFormProps) {
-  //console.log(user);
-  // if (user) {
-  //   const { id, name, email, password } = user;
-  // }
-
-  const initialState = {
-    errors: {
-      name: [],
-      email: [],
-      password: [],
-    },
-    message: "",
-  };
-
-  type State = {
-    name?: string;
-    email?: string;
-    password?: string;
-    errors?: {
-      name?: string[];
-      email?: string[];
-      password?: string[];
-    };
-    message?: string | null;
-  };
-
-  const action = async (state: State) => {
-    console.log(state);
-
-    const formData = new FormData();
-    formData.append("name", state.name ?? "");
-    formData.append("email", state.email ?? "");
-    formData.append("password", state.password ?? "");
-
-    const result = await createUser(state, formData);
-    return result;
-  };
-
-  const [state, dispatch] = useFormState(action, initialState);
-
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      username: "",
+      username: user?.name ?? "",
+      useremail: user?.email ?? "",
+      userpassword: user?.password ?? "",
     },
   });
 
-  function onSubmit(data: z.infer<typeof FormSchema>) {
+  const handleSubmit = (values: z.infer<typeof FormSchema>) => {
+    if (openType === "create") {
+      const formData = new FormData();
+      formData.append("username", values.username);
+      formData.append("useremail", values.useremail);
+      formData.append("userpassword", values.userpassword);
+
+      toast({
+        title: "createUser...",
+        description: <pre></pre>,
+      });
+
+      console.log("createUser", formData);
+      createUser(values);
+    } else {
+    }
+
+    // toast({
+    //   title: "You submitted the following values:",
+    //   description: (
+    //     <pre className="mt-2 w-[340px] rounded-md bg-slate-950 p-4">
+    //       <code className="text-white">{JSON.stringify(values, null, 2)}</code>
+    //     </pre>
+    //   ),
+    // });
+  };
+
+  const onSubmit = (data: z.infer<typeof FormSchema>) => {
     toast({
       title: "You submitted the following values:",
       description: (
@@ -130,11 +114,11 @@ export function UserForm({ openType, user }: UserFormProps) {
         </pre>
       ),
     });
-  }
+  };
 
   return (
     <Form {...form}>
-      <form className="p-10" onSubmit={form.handleSubmit(onSubmit)}>
+      <form className="p-10" onSubmit={form.handleSubmit(handleSubmit)}>
         <Card>
           <CardHeader>
             <CardTitle>
@@ -147,32 +131,48 @@ export function UserForm({ openType, user }: UserFormProps) {
               control={form.control}
               name="username"
               render={({ field }) => (
-                <FormItem>
+                <FormItem className="flex items-center justify-between gap-5">
                   <FormLabel>Username</FormLabel>
                   <FormControl>
-                    <Input placeholder="Username" {...field} />
+                    <Input placeholder="user name" {...field} />
                   </FormControl>
-                  <FormDescription>This is a user name.</FormDescription>
+                  {/* <FormDescription>This is a user name.</FormDescription> */}
                   <FormMessage />
                 </FormItem>
               )}
             />
-            {/* <div className="flex space-x-4 items-center">
-              <Label htmlFor="name">Username</Label>
-              <Input type="text" id="name" defaultValue={user?.name} />
-            </div>
-            <div className="flex space-x-4 items-center">
-              <Label htmlFor="email">Email</Label>
-              <Input type="email" id="email" defaultValue={user?.email} />
-            </div>
-            <div className="flex space-x-4 items-center">
-              <Label htmlFor="password">Password</Label>
-              <Input
-                type="password"
-                id="password"
-                defaultValue={user?.password}
-              />
-            </div> */}
+
+            <FormField
+              control={form.control}
+              name="useremail"
+              render={({ field }) => (
+                <FormItem className="flex items-center justify-between gap-5">
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <Input placeholder="user email" type="emal" {...field} />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
+
+            <FormField
+              control={form.control}
+              name="userpassword"
+              render={({ field }) => (
+                <FormItem className="flex items-center justify-between gap-5">
+                  <FormLabel>Password</FormLabel>
+                  <FormControl>
+                    <Input
+                      placeholder="user password"
+                      type="password"
+                      {...field}
+                    />
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
+            />
           </CardContent>
         </Card>
 
