@@ -7,6 +7,11 @@ const {
 } = require("../src/app/lib/placeholder-data.js");
 const bcrypt = require("bcrypt");
 
+console.log({
+  POSTGRES_URL: process.env.POSTGRES_URL,
+  POSTGRES_URL_NON_POOLING: process.env.POSTGRES_URL_NON_POOLING,
+});
+
 async function seedUsers(client) {
   try {
     await client.sql`CREATE EXTENSION IF NOT EXISTS "uuid-ossp"`;

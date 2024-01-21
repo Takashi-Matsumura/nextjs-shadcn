@@ -252,7 +252,7 @@ export async function fetchUsers() {
     // await new Promise((resolve) => setTimeout(resolve, 3000));
 
     // From chapter8
-    //noStore();
+    noStore();
 
     const users = await sql<User>`SELECT * FROM users;`;
     console.log("Fetching user data..." + users.rows.length);
