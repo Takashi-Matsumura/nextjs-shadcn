@@ -12,6 +12,8 @@ import {
   DrawerContent,
   DrawerDescription,
   DrawerHeader,
+  DrawerOverlay,
+  DrawerPortal,
   DrawerTitle,
   DrawerTrigger,
 } from "@/components/ui/drawer";
@@ -27,20 +29,22 @@ export function DataTableToolbar<TData>({
   return (
     <div className="flex items-center py-4">
       <div className=" flex items-center space-x-3">
-        <Drawer>
+        <Drawer direction="right">
           <DrawerTrigger asChild>
             <Button variant="outline">
               <PlusIcon className="h-4 w-4" />
               New
             </Button>
           </DrawerTrigger>
-          <DrawerContent>
-            <UserForm
-              openType="create"
-              user={{ id: "", name: "", email: "", password: "" }}
-              className="px-4 grid items-start gap-4"
-            />
-          </DrawerContent>
+          <DrawerPortal>
+            <DrawerContent className="bg-white flex flex-col rounded-t-[10px] h-full w-1/2 mt-24 ml-auto">
+              <UserForm
+                openType="create"
+                user={{ id: "", name: "", email: "", password: "" }}
+                className="px-4 grid items-start gap-4"
+              />
+            </DrawerContent>
+          </DrawerPortal>
         </Drawer>
         <Input
           placeholder="Email search..."

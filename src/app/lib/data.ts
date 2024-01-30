@@ -288,41 +288,62 @@ const FormSchema = z.object({
   }),
 });
 
-export async function createUser(data: z.infer<typeof FormSchema>) {
-  // /values: z.infer<typeof FormSchema>
-  const validatedFields = FormSchema.safeParse(data);
-
-  if (!validatedFields.success) {
-    console.log("Missing Fields. Failed to Create User.");
-    return {
-      errors: validatedFields.error.flatten().fieldErrors,
-      message: "Missing Fields. Failed to Create User.",
-    };
-  }
-
-  const { username, useremail, userpassword } = validatedFields.data;
+export async function testFunction() {
+  const petName = "hoge";
+  const ownerName = "aho";
 
   try {
-    const hashedPassword = await bcrypt.hash(userpassword, 10);
-    console.log("insert user data..." + username + useremail + hashedPassword);
-
-    //const client = await db.connect();
-
-    await sql`
-        INSERT INTO users (name, email, password)
-        VALUES (${username}, ${useremail}, ${hashedPassword});
-      `;
+    if (!petName || !ownerName) throw new Error("Pet and owner names required");
+    await sql`INSERT INTO Pets (Name, Owner) VALUES (${petName}, ${ownerName});`;
   } catch (error) {
     console.error("Database Error:", error);
-    // console.log("Database Error:", error);
-    // If a database error occurs, return a more specific error.
     return {
       message: "Database Error: Failed to Create User.",
     };
   }
+}
 
-  revalidatePath("/dashboard/user");
-  redirect("/dashboard/user");
+export async function createUser2(value: User) {
+  try {
+    const result = await sql`SELECT 1;`;
+    console.log(result);
+  } catch (error) {
+    console.error(process.env.POSTGRES_URL);
+    console.error("Database connection error:", error);
+  }
+}
+
+export async function createUser(data: z.infer<typeof FormSchema>) {
+  try {
+    const result = await sql`SELECT 1;`;
+    console.log(result);
+  } catch (error) {
+    console.error(process.env.POSTGRES_URL);
+    console.error("Database connection error:", error);
+  }
+  // const validatedFields = FormSchema.safeParse(data);
+
+  // if (!validatedFields.success) {
+  //   console.log("Missing Fields. Failed to Create User.");
+  //   return {
+  //     errors: validatedFields.error.flatten().fieldErrors,
+  //     message: "Missing Fields. Failed to Create User.",
+  //   };
+  // }
+
+  // const { username, useremail, userpassword } = validatedFields.data;
+
+  // const hashedPassword = await bcrypt.hash(userpassword, 10);
+  // console.log("insert user data..." + username + useremail + hashedPassword);
+
+  // try {
+  //   await sql`INSERT INTO Users (Name, Email, Password) VALUES (${username}, ${useremail}, ${hashedPassword});`;
+  // } catch (error) {
+  //   console.error("Database Error:", error);
+  //   return {
+  //     message: "Database Error: Failed to Create User.",
+  //   };
+  // }
 }
 
 // export async function createUser(prevState: State, formData: FormData) {

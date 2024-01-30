@@ -3,10 +3,8 @@
 import * as React from "react";
 import { Check, ChevronsUpDown } from "lucide-react";
 
-import { Label } from "@/components/ui/label";
 import { Button } from "@/components/ui/button";
 import { DrawerClose } from "@/components/ui/drawer";
-import { Switch } from "@/components/ui/switch";
 
 import {
   Form,
@@ -18,20 +16,6 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 
-import { cn } from "@/lib/utils";
-import {
-  Command,
-  CommandEmpty,
-  CommandGroup,
-  CommandInput,
-  CommandItem,
-} from "@/components/ui/command";
-import {
-  Popover,
-  PopoverContent,
-  PopoverTrigger,
-} from "@/components/ui/popover";
-
 import {
   Card,
   CardContent,
@@ -41,15 +25,16 @@ import {
   CardTitle,
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { useFormState } from "react-dom";
-import { init } from "next/dist/compiled/webpack/webpack";
 import { User } from "./data/schema";
-import { createUser } from "@/app/lib/data";
+import { createUser, fetchUsers, testFunction } from "@/app/lib/data";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 import * as z from "zod";
 import { toast } from "@/components/ui/use-toast";
+
+import axios from "axios";
+import { dbConnectionCheck } from "@/app/lib/actions";
 
 type UserFormProps = {
   className?: string;
@@ -69,6 +54,13 @@ const FormSchema = z.object({
 });
 
 export function UserForm({ openType, user }: UserFormProps) {
+  console.log("UserForm is rendering", openType, user);
+  console.log("b-- " + process.env.POSTGRES_URL);
+
+  React.useEffect(() => {
+    console.log("c-- " + process.env.POSTGRES_URL);
+  }, []);
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -92,6 +84,7 @@ export function UserForm({ openType, user }: UserFormProps) {
 
       console.log("createUser", formData);
       createUser(values);
+      //testFunction();
     } else {
     }
 
@@ -114,11 +107,13 @@ export function UserForm({ openType, user }: UserFormProps) {
         </pre>
       ),
     });
+    ("use server");
+    console.log("hoge");
   };
 
   return (
     <Form {...form}>
-      <form className="p-10" onSubmit={form.handleSubmit(handleSubmit)}>
+      <form className="p-10" action={dbConnectionCheck}>
         <Card>
           <CardHeader>
             <CardTitle>

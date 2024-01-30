@@ -5,5 +5,11 @@ export default async function Page() {
   const users = await fetchUsers();
   //console.log(users);
 
-  return <DataTableQuery data={users} />;
+  console.log("1**" + process.env.POSTGRES_URL);
+
+  return (
+    <>
+      <DataTableQuery data={users} />
+    </>
+  );
 }
