@@ -26,7 +26,7 @@ import {
 } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { User } from "./data/schema";
-import { createUser, fetchUsers, testFunction } from "@/app/lib/data";
+import { fetchUsers, testFunction } from "@/app/lib/data";
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
@@ -34,7 +34,7 @@ import * as z from "zod";
 import { toast } from "@/components/ui/use-toast";
 
 import axios from "axios";
-import { dbConnectionCheck } from "@/app/lib/actions";
+import { dbConnectionCheck, createUser } from "@/app/lib/actions";
 
 type UserFormProps = {
   className?: string;
@@ -113,7 +113,7 @@ export function UserForm({ openType, user }: UserFormProps) {
 
   return (
     <Form {...form}>
-      <form className="p-10" action={dbConnectionCheck}>
+      <form className="p-10" action={createUser}>
         <Card>
           <CardHeader>
             <CardTitle>
