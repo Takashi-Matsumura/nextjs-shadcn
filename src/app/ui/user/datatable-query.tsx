@@ -37,8 +37,6 @@ interface DataTableQueryProps {
 }
 
 export function DataTableQuery({ data }: DataTableQueryProps) {
-  console.log("a-- " + process.env.POSTGRES_URL);
-
   const [rowSelection, setRowSelection] = React.useState({});
   const [columnVisibility, setColumnVisibility] =
     React.useState<VisibilityState>({});
